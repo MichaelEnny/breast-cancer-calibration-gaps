@@ -1,0 +1,30 @@
+– Vary sentence structure and sentence length to increase burstiness  
+– Introduce intellectual hesitation (e.g., "may suggest", "appears to", "is likely to")  
+– Add nuance, subtle critique, or alternative perspectives where appropriate  
+– Avoid overused or generic AI vocabulary like “delve,” “robust,” “innovative,” etc.  
+– Use more natural transitions (and not too many like "therefore", "moreover", "in conclusion")  
+– Replace vague examples with specific, relatable, or realistic details  
+– Adjust tone and style so it sounds less polished and more human (a little informal is okay)  
+– If relevant, include first-person voice or a light anecdotal tone  
+– Break repetition in how sentences begin (e.g., don’t start every sentence with “This study…” or “It is important…”)  
+– Preserve the *original meaning* and context, but improve naturalness and authenticity
+
+1.     “Write for a 12-year-old. They should be able to understand this, so provide relatable information and examples, but don’t sound cheesy, as adults will be the ones actually reading this article.”
+
+2.     “Please generate text that avoids using formal or overly academic phrases such as 'it is worth noting,' 'furthermore,' 'consequently,' 'in terms of,' 'one may argue,' 'it is imperative,' 'this suggests that,' 'thus,' 'it is evident that,' 'notwithstanding,' 'pertaining to,' 'therein lies,' 'utilize,' 'be advised,' 'hence,' 'indicate,' 'facilitate,' 'subsequently,' 'moreover,' and 'it can be seen that.' Aim for a natural, conversational style that sounds like two friends talking at the coffee shop. Use direct, simple language and choose phrases that are commonly used in everyday speech. If a formal phrase is absolutely necessary for clarity or accuracy, you may include it, but otherwise, please prioritize making the text engaging, clear, and relatable."
+
+3.     “When writing this article, keep in mind our customers live in (name the area if this applies to a local/regional business). Reference local phrases, landmarks, cultures, etc., if applicable.”
+
+4.     “Use contractions, colloquialisms, and approachable language throughout the article.”
+
+5.     “When writing the article, please use our company name, which is (Company Name), at a few different points. It should be clear to the reader that we are the ones writing this post.” (feel free to include more pertinent information regarding your company here)
+
+6.     “Do NOT be pushy or salesy with your writing style. We want the reader to know our company exists and that it solves the problem the article is discussing, but the style should not come across as biased. This is VERY important. The reader should sense we are very human just like them, we understand their problems, and we seek to honestly give them accurate information, in a fun, casual way.”
+
+7.     "Clarify the concepts in the article by anchoring them in vivid, conceivable real-life scenarios. Feel free to craft illustrative anecdotes that shed light on the subject matter. Transparency is key here—ensure that these hypothetical situations are presented as fictional examples, NOT as factual occurrences, as we want to maintain integrity with the reader."
+
+8.     “The introduction of the article should identify the problem the buyer has and contextualize who they are. It should also outline what the reader will get and learn from reading the post, and the payoff that will come with completing the content.”
+
+9.     “Vary the length of the paragraphs and sentences in these writings. Look for opportunities to create punchy, incisive moments to land your points, while at other times produce paragraphs that are 2-4 sentences as needed.”
+
+10.  “Keep in mind our primary avatar/persona for this article is (Describe your ideal persona/reader here. Be as detailed as you’d like to be.) Reference these elements of the avatar when appropriate to the content.”

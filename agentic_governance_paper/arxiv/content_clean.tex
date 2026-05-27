@@ -1,0 +1,861 @@
+\begin{abstract}
+Agentic artificial intelligence in healthcare is advancing faster than
+the governance frameworks designed to oversee it. These systems are
+autonomous, goal-directed, and capable of multi-step reasoning and
+sequential decision-making. They introduce accountability challenges
+that existing clinical AI standards were not built to address. Current
+standards, including TRIPOD+AI, DECIDE-AI, and the FDA guidance on
+AI/ML-based software as a medical device, were designed to evaluate
+static models at a point in deployment. They do not address
+pipeline-level reliability, compounding errors across agent decision
+steps, or the accountability vacuum created when autonomous systems act
+at speeds beyond human review.
+
+This perspective proposes a five-layer trustworthiness governance
+framework for agentic healthcare AI that extends model validation
+standards to cover: (1) calibration integrity and uncertainty
+quantification at each agent decision point, (2) subgroup fairness
+auditing across demographic groups, (3) verifiable model provenance, (4)
+patient-controlled consent management for autonomous AI actions, and (5)
+scored deployment readiness with ongoing monitoring criteria. Each layer
+carries measurable thresholds. An Expected Calibration Error at or below
+0.10, conformal prediction coverage at or above 0.90, and a subgroup ECE
+gap below 0.05 make the framework operationalizable rather than merely
+aspirational.
+
+Blockchain and distributed ledger technologies (DLT) are not peripheral
+to this governance agenda. They provide the accountability
+infrastructure that makes trustworthiness evidence verifiable,
+persistent, and independently auditable. Immutable audit trails, smart
+contract-encoded ethical constraints, and decentralized consent
+registries address the epistemic accountability gap that traditional
+logging cannot fill. The framework connects directly to emerging
+empirical research on clinical AI calibration, conformal prediction, and
+deployment readiness evaluation, and is designed for empirical
+validation in subsequent research.
+\end{abstract}
+
+
+\section*{Plain Language Summary}\label{plain-language-summary}
+
+\textbf{What this paper is about.} Healthcare AI is going ``agentic.''
+These systems make sequences of decisions without a human approving each
+step. An AI agent might monitor a patient's vital signs, detect a
+deterioration pattern, and automatically alert the care team or initiate
+escalation. These systems are already in clinical use.
+
+\textbf{The problem.} The rules we use to keep healthcare AI safe were
+designed for tools that make one decision at a time. Those older rules
+do not address what happens when AI makes many consecutive decisions,
+how errors compound across steps, or who is accountable when an
+autonomous system causes harm.
+
+\textbf{What we propose.} This paper proposes five requirements for any
+agentic AI system in healthcare: (1) probability predictions should be
+well-calibrated at every decision step, (2) the system should work
+equitably across patient groups, (3) training history and data sources
+should be traceable and verifiable, (4) patients should have control
+over what AI is permitted to do on their behalf, and (5) the system
+should pass a structured readiness assessment before deployment, with
+continuous monitoring thereafter.
+
+\textbf{Why blockchain helps.} Blockchain creates permanent,
+tamper-proof digital records. This provides the foundation to make these
+five requirements enforceable and independently verifiable.
+Blockchain-based audit trails, smart contracts, and decentralized
+consent registries turn governance rules from policy documents into
+operational constraints built into the system itself.
+
+\textbf{Who this is for.} Clinical informaticists, health system
+leaders, AI developers, and policymakers who need a practical governance
+framework for deploying agentic AI responsibly in healthcare.
+
+
+\section{Introduction}\label{introduction}
+
+\subsection{The Agentic Shift in Healthcare
+AI}\label{the-agentic-shift-in-healthcare-ai}
+
+Artificial intelligence in healthcare has crossed a threshold. For more
+than a decade, clinical AI research focused on a well-defined paradigm:
+train a model on historical data, validate it against a held-out test
+set, report discrimination metrics, and evaluate whether predictions
+exceed a performance threshold. The fundamental unit was a single
+inference: one patient, one input, one prediction. Clinical
+decision-support systems operating in this mode function as
+sophisticated calculators, responding to a clinician's query with a risk
+score or classification label.
+
+This paradigm is being supplanted by a qualitatively different model of
+AI deployment. Agentic AI systems are autonomous, goal-directed software
+entities capable of multi-step reasoning, tool use, planning, and
+sequential action. They do not respond to a single prompt and stop. They
+pursue goals, decompose tasks, invoke external systems, retrieve
+information, make intermediate decisions, and produce outputs that often
+trigger further automated actions. Clinical examples span multiple care
+settings. Some systems autonomously monitor patient deterioration
+signals across data streams and initiate escalation protocols. Others
+iterate through laboratory and imaging results to refine differential
+diagnoses. Medication safety agents cross-check orders against patient
+records, interaction databases, and renal function values. Care
+coordination systems schedule and adjust clinical workflows without a
+clinician approving each step~{[}1{]}. A 2025 systematic review of AI
+agents in clinical medicine documented twenty studies spanning discrete
+clinical tasks including diagnostic reasoning, medication management,
+and evidence retrieval, with agent systems outperforming their base
+model counterparts by a median of 53 percentage points in single-agent
+tool-calling studies, underscoring both the clinical promise and the
+governance urgency of agentic deployment~{[}2{]}.
+
+\subsection{Why This Changes the Governance
+Problem}\label{why-this-changes-the-governance-problem}
+
+The governance implications of this shift are not incremental. They are
+structural. When AI acts as a single-inference tool, accountability is
+straightforward: a clinician requests a prediction, evaluates it, and
+decides whether to act on it. The AI is a consultant whose opinion is
+accepted or rejected. When AI acts as an agent, this structure
+dissolves. The agent is no longer a consultant. It is a participant in
+care delivery. Its actions occur at speeds that preclude human review at
+each step. Its errors compound: an incorrect intermediate decision at
+step two affects all subsequent steps. Responsibility becomes diffuse
+across the AI system, the developers, the institution, and the
+clinicians nominally supervising the process.
+
+\subsection{The Governance Gap}\label{the-governance-gap}
+
+Existing clinical AI governance frameworks were not designed for this
+environment. TRIPOD+AI~{[}3{]} provides reporting standards for model
+development and validation but addresses models, not pipelines.
+DECIDE-AI~{[}4{]} guides the evaluation of clinical decision-support
+interventions but does not distinguish between single-inference tools
+and multi-step agents. The FDA's AI/ML-based Software as a Medical
+Device (SaMD) framework~{[}5{]} addresses pre-market validation and
+post-market surveillance but was conceived before agentic deployment
+became clinically common. The EU AI Act~{[}6{]} imposes requirements for
+high-risk AI systems in healthcare but provides limited operational
+guidance for autonomous pipeline governance. None of these frameworks
+specifies how to measure, record, or verify trustworthiness at the level
+of individual agent decisions in a running clinical system.
+
+This paper addresses that gap. We propose a five-layer trustworthiness
+governance framework specifically designed for agentic healthcare AI,
+and argue that distributed ledger technologies provide the
+accountability infrastructure necessary to make this framework
+operational and verifiable at scale.
+
+
+\section{What Makes Agentic Healthcare AI
+Different}\label{what-makes-agentic-healthcare-ai-different}
+
+Before governance frameworks can be designed, the distinctive properties
+of agentic AI that create governance challenges must be understood. Four
+properties differentiate agentic AI from traditional clinical prediction
+models.
+
+\subsection{Sequential Decision-Making and Error
+Compounding}\label{sequential-decision-making-and-error-compounding}
+
+Traditional clinical AI makes a single prediction given a single input.
+Agentic AI makes sequences of decisions, where each step's output feeds
+the next step's input. This creates an error compounding dynamic absent
+from single-inference systems: an overconfident probability estimate at
+step two, if not flagged and corrected, propagates into step four as if
+it were reliable. Calibration, the alignment between predicted
+probability and true event frequency, matters not only at the final
+output but at every intermediate decision that affects subsequent steps.
+
+Current calibration evaluation methodology was developed for
+single-output models. A model's Expected Calibration Error (ECE) is
+computed over its test set predictions as a whole~{[}7{]}. In an agentic
+pipeline, each decision node has its own calibration profile, and
+aggregate pipeline reliability depends on the product of individual node
+reliabilities. A pipeline composed of five individually well-calibrated
+decisions still produces systematically miscalibrated outputs if
+calibration error accrues in a consistent direction across nodes~{[}8{]}.
+
+\subsection{Opacity of Reasoning
+Chains}\label{opacity-of-reasoning-chains}
+
+Single-inference models are analyzed using well-established
+interpretability methods: SHAP values decompose a prediction into
+feature contributions, calibration curves reveal probability
+reliability, and permutation importance identifies the features driving
+a classification. Agentic reasoning chains, particularly those involving
+large language model (LLM) components, iterative retrieval, or
+multi-agent orchestration, are substantially harder to audit. The
+intermediate states between initial input and final recommendation are
+partially or fully inaccessible, and their contribution to the final
+output often cannot be recovered after the fact.
+
+This opacity creates an accountability deficit. When an agentic system
+produces a harmful recommendation, investigators are often unable to
+identify which reasoning step introduced the error, whether the error
+reflected a miscalibrated prediction, a biased training distribution, or
+an inappropriate action at a pipeline junction. Without a durable,
+auditable record of intermediate states, post-incident analysis becomes
+speculative.
+
+\subsection{Speed Beyond Human Review
+Cycles}\label{speed-beyond-human-review-cycles}
+
+A defining property of agentic AI is its capacity to act at speeds
+beyond human review. A triage agent processing 50 patient deterioration
+signals per hour cannot be meaningfully supervised by a clinician
+reviewing each action in real time. Meaningful human oversight requires
+mechanisms beyond real-time review: governance must be embedded in the
+system's design through pre-deployment constraints, hardcoded
+boundaries, and automatic escalation triggers, then verified through
+post-hoc audit rather than concurrent human review~{[}9{]}.
+
+\subsection{Diffuse Moral
+Responsibility}\label{diffuse-moral-responsibility}
+
+When a single prediction model is used by a clinician and a patient is
+harmed, responsibility analysis proceeds along a recognizable chain: the
+model developer, the deploying institution, and the clinician who acted
+on the recommendation. Agentic pipelines involving multiple AI
+components, orchestration layers, external data sources, and automated
+actions dissolve this chain. Responsibility becomes distributed across
+parties who each have partial control over some steps and no control
+over others~{[}10{]}. This diffusion is not merely a legal problem. It
+creates practical barriers to learning from failures, holding actors
+accountable, and deterring unsafe deployment.
+
+
+\section{The Trustworthiness Gap in Current Governance
+Frameworks}\label{the-trustworthiness-gap-in-current-governance-frameworks}
+
+\subsection{What Existing Frameworks
+Address}\label{what-existing-frameworks-address}
+
+Several frameworks have emerged to govern clinical AI quality. TRIPOD+AI~{[}3{]}
+extends the TRIPOD reporting guideline to include AI-specific
+transparency requirements: model architecture, training data provenance,
+calibration reporting, and external validation. DECIDE-AI~{[}4{]}
+provides guidance for the evaluation of AI-based clinical
+decision-support interventions, emphasizing clinical utility alongside
+statistical performance. The FDA SaMD framework~{[}5{]} establishes a
+risk-based regulatory pathway for AI-enabled medical devices, including
+requirements for pre-market validation and post-market surveillance. The
+EU AI Act~{[}6{]} classifies healthcare AI as high-risk and imposes
+requirements for transparency, documentation, human oversight, and
+robustness.
+
+\subsection{What They Miss}\label{what-they-miss}
+
+Despite their importance, these frameworks share a common limitation:
+they were designed for model-level evaluation at a point in time, not
+for ongoing pipeline-level governance of autonomous systems.
+
+\textbf{Calibration is underspecified.} TRIPOD+AI recommends calibration
+reporting but provides no threshold standards. A 2024 systematic review
+and meta-analysis of prediction models for incident chronic kidney
+disease derived or validated in community-based electronic health
+records found calibration reporting so deficient that pooled
+meta-analysis was not possible. Risk of bias was high in 64\% of
+included models, and no clinical utility analyses or impact studies were
+identified for any model~{[}11{]}. The implication for agentic AI
+governance is direct: existing frameworks cannot ensure the probability
+estimates produced by agent decision nodes are reliable enough to
+support downstream automated actions.
+
+\textbf{Uncertainty is absent.} Fewer than 4\% of clinical AI studies
+report any uncertainty measure alongside their predictions~{[}12{]}. For
+single-inference tools, this is a quality gap. For agentic systems where
+uncertain predictions propagate into subsequent automated actions, it is
+a safety gap. If an agent does not know, and cannot communicate, that
+its probability estimate at step three carries high uncertainty, it
+cannot appropriately defer to human review or widen its decision
+threshold.
+
+\textbf{Fairness is aggregate, not pipeline-level.} Where fairness
+evaluation exists in clinical AI governance, it typically measures
+whether subgroup performance gaps exist at the level of a model's test
+set. It does not evaluate whether bias accrues or compounds across agent
+pipeline steps, or whether demographic disparities in agent
+recommendations emerge from the interaction of multiple individually
+unbiased components~{[}13{]}.
+
+\textbf{Audit trails are informal and mutable.} No current governance
+framework specifies what constitutes an adequate audit record for an AI
+agent's actions. Server logs, model outputs, and database entries are
+institution-specific, mutable, and not independently verifiable. In a
+regulatory dispute or adverse event investigation, the absence of
+immutable, standardized audit records makes accountability analysis
+unreliable.
+
+\textbf{Consent frameworks predate autonomy.} Existing informed consent
+mechanisms in healthcare AI were designed around patient consent to data
+use and model deployment. They were not built for patient consent to
+autonomous AI action on their behalf at each step of a clinical process.
+As agentic AI increasingly acts without direct human mediation, the
+concept of meaningful consent requires rethinking~{[}13{]}.
+
+
+\section{A Five-Layer Trustworthiness Governance
+Framework}\label{a-five-layer-trustworthiness-governance-framework}
+
+We propose a five-layer framework that addresses the gaps identified
+above. Each layer carries measurable criteria and applies both
+pre-deployment and as a continuous monitoring protocol for running
+agentic systems.
+
+\subsection{Layer 1: Reliability Evaluation}\label{layer-1-reliability-evaluation}
+
+Reliability evaluation governs whether the probability outputs produced
+by each agent decision node are trustworthy enough to support downstream
+automated action.
+
+\textbf{Calibration assessment} requires computing the Expected
+Calibration Error (ECE) for each decision node using empirical frequency
+analysis across probability bins~{[}7{]}. We propose ECE $\leq 0.10$ as a
+minimum deployment threshold, consistent with emerging clinical AI
+quality standards. The Brier Score and Brier Skill Score provide
+complementary summary measures. Guo et al.~{[}7{]} demonstrate how both
+metrics reveal systematic overconfidence in deep learning models.
+Critically, calibration must be evaluated not only on the original
+training distribution but on the distribution of inputs the deployed
+agent actually encounters, including the heterogeneous,
+missing-data-rich inputs characteristic of real clinical environments.
+
+\textbf{Uncertainty quantification} using split conformal
+prediction~{[}8{]} provides distribution-free coverage guarantees at each
+decision node. Conformal prediction produces a prediction set rather
+than a single probability estimate. This set is guaranteed to contain
+the true label with probability $1-\alpha$, where $\alpha$ is the chosen
+miscoverage rate. We propose a coverage guarantee of $\geq 0.90$ for
+clinical agentic AI, ensuring the agent communicates not just its best
+prediction but the range of outcomes it cannot rule out. When prediction
+sets include multiple labels, indicating ambiguous predictions, the
+agent should defer to human review rather than proceed autonomously.
+
+\textbf{External validation} is required before deployment: calibration
+metrics should be recomputed on a prospectively collected or
+geographically distinct external dataset to measure calibration drift,
+the degradation of probability reliability when the model encounters a
+new clinical environment~{[}11{]}.
+
+\subsection{Layer 2: Fairness Auditing}\label{layer-2-fairness-auditing}
+
+Fairness auditing governs whether agent reliability is equitably
+distributed across patient subgroups.
+
+Calibration should be stratified by age group (e.g., below 65 vs.~65
+and older), sex, race/ethnicity where available, and clinically relevant
+comorbidity groups (e.g., diabetes status, chronic kidney disease
+stage). We propose a maximum allowable ECE gap of 0.05 between any two
+demographic subgroups as a deployment gate. Where subgroup calibration
+gaps exceed this threshold, the deploying institution should either
+perform targeted recalibration on underrepresented groups or restrict
+deployment to populations where calibration has been demonstrated.
+
+False negative disparity deserves particular attention in healthcare AI,
+where missed diagnoses disproportionately harm already-disadvantaged
+groups~{[}13{]}. An agent well-calibrated overall but systematically
+underestimating risk for elderly patients or patients from racial
+minority groups amplifies existing healthcare inequities rather than
+reducing them.
+
+\subsection{Layer 3: Provenance Verification}\label{layer-3-provenance-verification}
+
+Provenance verification governs whether the lineage of an agent's models
+and training data is independently verifiable.
+
+\textbf{Model versioning} requires each deployed agent decision node to
+carry a verifiable identifier, a cryptographic hash of the model weights
+and architecture, recorded at deployment. Any change to the model,
+including recalibration, fine-tuning, or architecture modification, must
+generate a new identifier and a new deployment record.
+
+\textbf{Training data documentation} requires that the characteristics
+of training datasets, including size, demographic composition, data
+source, collection period, and preprocessing steps, be documented and
+verifiable. This documentation must allow an independent reviewer to
+assess whether the training distribution is representative of the
+deployment environment.
+
+\textbf{Deployment history} records when each model version was
+deployed, to which clinical contexts, and under what oversight
+conditions. This record enables post-incident analysis: when a patient
+is harmed, investigators identify exactly which model version was
+running, what it was trained on, and whether its deployment conditions
+matched its validation conditions.
+
+\subsection{Layer 4: Consent Management}\label{layer-4-consent-management}
+
+Consent management governs the scope of autonomous AI action to which a
+patient has agreed.
+
+Current consent frameworks in healthcare AI address consent to data use
+and model deployment at the institutional level. Agentic AI requires
+more granular consent: a patient should be able to specify whether they
+consent to autonomous AI actions affecting their care plan, whether they
+require human review before AI-initiated actions take effect, and
+whether they retain the right to override an AI agent's recommendation
+at any step.
+
+This requires a consent architecture capable of expressing, storing, and
+enforcing these preferences, and updating them as the patient's care
+context changes. Static institutional consent forms signed at admission
+are insufficient for an environment where AI agents act on a patient's
+behalf across multiple care episodes, data systems, and clinical teams.
+
+\subsection{Layer 5: Deployment Readiness and Ongoing Monitoring}\label{layer-5-deployment-readiness-and-ongoing-monitoring}
+
+Deployment readiness scoring integrates the preceding four layers into a
+structured pre-deployment gate and a continuous post-deployment
+monitoring protocol.
+
+Pre-deployment, each agent is assessed against a deployment readiness
+checklist:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Discrimination adequacy (AUROC $\geq 0.85$ on external validation)
+\item
+  Calibration adequacy (ECE $\leq 0.10$ on external validation)
+\item
+  Calibration stability (calibration drift $\leq 0.05$ across internal
+  and external datasets)
+\item
+  Uncertainty coverage (conformal coverage $\geq 0.90$ on external
+  validation)
+\item
+  Coverage stability (coverage drift $\leq 0.05$ across datasets)
+\item
+  Prediction interpretability (singleton rate $\geq 0.70$, the
+  proportion of instances receiving an unambiguous prediction)
+\item
+  Subgroup calibration equity (ECE gap across subgroups $\leq 0.05$)
+\item
+  Transparency and reproducibility (full code, data pipeline, and model
+  documentation publicly or institutionally accessible)~{[}14{]}
+\end{enumerate}
+
+Post-deployment, ongoing monitoring tracks calibration drift over time
+using sequential ECE monitoring with statistical process control alerts.
+A statistically significant increase in ECE above the deployment
+threshold triggers a mandatory review cycle and, if unresolved,
+mandatory decommissioning.
+
+
+\section{Distributed Ledger Technologies as Accountability
+Infrastructure}\label{distributed-ledger-technologies-as-accountability-infrastructure}
+
+\subsection{Why Traditional Logging Is
+Insufficient}\label{why-traditional-logging-is-insufficient}
+
+The trustworthiness framework described above generates a substantial
+body of evidence: calibration metrics, fairness audits, provenance
+records, consent documents, deployment readiness scores, and ongoing
+monitoring data. For this evidence to support accountability in
+regulatory review, adverse event investigation, or litigation, it must
+be durable, verifiable, and independent of any single institution's
+control.
+
+Traditional server logs and database records fail on all three criteria.
+They are mutable: records can be altered by administrators with access.
+They are siloed: records from different components of a
+multi-institutional agentic pipeline are stored in incompatible systems
+without a common reference. They are not independently verifiable: an
+institution claiming its AI agent behaved correctly at a given time
+cannot prove its own internal records have not been modified.
+
+These limitations are not merely theoretical. In healthcare environments
+where AI agents act across institutional boundaries, for example a
+diagnostic agent querying a regional radiology system or a triage agent
+integrating data from multiple hospitals, no single institution's
+logging architecture provides an authoritative audit record of the full
+pipeline.
+
+\subsection{Blockchain-Based Audit
+Trails}\label{blockchain-based-audit-trails}
+
+Blockchain and distributed ledger technologies address these limitations
+through properties architecturally suited to the accountability
+requirements of agentic healthcare AI. As blockchain and AI converge as
+complementary pillars of digital health transformation, their
+integration for governance and accountability has emerged as a priority
+challenge for healthcare systems globally~{[}15{]}.
+
+\textbf{Immutability} means that once a transaction is written to the
+ledger, it cannot be altered without consensus from the network, making
+post-hoc modification of audit records computationally and
+organizationally prohibitive. For agentic AI governance, each
+significant agent decision (a risk score above a clinical threshold, an
+automated order, a care plan modification) is recorded as an on-chain
+transaction, creating a tamper-resistant record of what the agent did,
+when, on what inputs, and with what output.
+
+\textbf{Verifiability} means any authorized party independently confirms
+that a record has not been modified since it was written. A regulatory
+auditor, a patient's legal representative, or a clinical ethics
+committee verifies the audit trail of an AI agent's actions without
+depending on the deploying institution's attestation.
+
+\textbf{Decentralization} means the audit record is not controlled by
+any single party. In a multi-institutional agentic pipeline, a shared
+distributed ledger allows each participant to contribute to and verify
+the record without any single party having unilateral control over what
+the record says~{[}16{]}.
+
+\textbf{Smart contracts} enable the encoding of governance rules as
+executable code running on the ledger. Rather than relying on
+institutional policy, a smart contract enforces governance rules
+automatically: if an agent's conformal prediction set contains multiple
+labels, the contract blocks autonomous action and generates a human
+escalation event recorded on-chain. Ullah et al.~demonstrate this
+approach in the EHR domain, implementing purpose-based access control
+policies through smart contracts that establish comprehensive, immutable
+audit trails recording transaction details, access purposes, digital
+signatures, and timestamps, providing accountability for all data access
+events while eliminating dependence on trusted intermediaries~{[}16{]}.
+Governance rules become operational constraints with independently
+verifiable enforcement, not aspirational policies.
+
+\subsection{Decentralized Consent
+Management}\label{decentralized-consent-management}
+
+Patient consent for autonomous AI action is particularly well-suited to
+blockchain-based management. A consent record written to a distributed
+ledger is patient-controlled, institution-independent, and auditable. A
+patient who consents to AI-assisted triage but not AI-initiated
+medication changes records this granular preference in a consent entry
+that any component of the agentic pipeline checks before acting.
+
+Smart contracts enforce consent boundaries in real time: when an AI
+agent proposes an action, the contract checks whether that action class
+falls within the patient's recorded consent scope and blocks it if not,
+generating a logged exception for human review. This architecture gives
+consent teeth. Consent is not simply a document signed at admission but
+a live constraint on system behavior.
+
+\subsection{Verifiable Model
+Provenance}\label{verifiable-model-provenance}
+
+The provenance requirements described in Layer~3 are directly
+implementable using on-chain model registries. When a new model version
+is deployed, its cryptographic hash, computed from the model weights,
+architecture specification, and training data characteristics, is
+written to the ledger. Any subsequent query to the agent verifies, in
+real time, that the model responding to the query is the registered,
+validated version and not a modified derivative.
+
+This is particularly important in environments where models are
+periodically updated: a post-deployment recalibration that improves
+performance on a new patient population sometimes degrades performance
+on a previously studied subgroup. An on-chain model registry makes every
+version change traceable, reversible, and independently verifiable. Liu
+and Hu's systematic review of blockchain-AI integration in healthcare,
+spanning 1,221 publications from 2015 to 2025, identifies model
+provenance, traceability, and smart contract-enforced data governance as
+foundational requirements for building a trustworthy and intelligent
+healthcare ecosystem, with blockchain providing the immutability and
+auditability that AI-generated clinical outputs require~{[}17{]}.
+
+\subsection{Federated Learning for Privacy-Preserving Distributed
+Governance}\label{federated-learning-for-privacy-preserving-distributed-governance}
+
+Governance at scale, across multiple hospitals, health systems, and
+jurisdictions, requires access to diverse patient populations for
+calibration validation and fairness auditing. Federated learning enables
+models to be trained and calibrated across distributed datasets without
+centralizing sensitive patient data, with distributed ledger
+technologies providing the coordination, verification, and audit
+infrastructure for the federated process~{[}18{]}.
+
+Each participating institution trains on its local data, contributes
+gradient updates or model statistics to the federated process, and
+receives in return a globally calibrated model whose performance has
+been verified across the federation's full population diversity. The
+ledger records each institution's participation, the aggregation
+protocol used, and the resulting model provenance, providing
+accountability for the full federated governance process.
+
+
+\section{Implementation Challenges}\label{implementation-challenges}
+
+The framework proposed here is architecturally sound, but its
+implementation faces challenges that a research agenda must address
+honestly.
+
+\subsection{Latency and Throughput}\label{latency-and-throughput}
+
+Writing audit transactions to a distributed ledger introduces latency
+that is often incompatible with real-time clinical decision support. A
+triage agent writing an on-chain transaction for each decision step
+faces throughput constraints that delay time-sensitive interventions.
+Architectural solutions including off-chain computation with on-chain
+commitment, periodic batch anchoring of audit summaries, and layer-2
+scaling protocols help mitigate this, but they require careful design to
+preserve the immutability properties that motivate on-chain governance
+in the first place.
+
+\subsection{Interoperability with Existing Health Information
+Systems}\label{interoperability-with-existing-health-information-systems}
+
+Healthcare institutions operate across a heterogeneous collection of
+electronic health record systems, laboratory information systems, and
+clinical data warehouses that predate blockchain-based architectures.
+Integrating on-chain governance with existing health information
+infrastructure requires FHIR-compliant data exchange, HL7 interface
+standards, and institutional commitment to adopting new auditing
+protocols. On-chain governance cannot be imposed on existing systems
+without substantial integration engineering.
+
+\subsection{GDPR and the Right to
+Erasure}\label{gdpr-and-the-right-to-erasure}
+
+Blockchain's immutability creates a direct tension with GDPR's right to
+erasure. A patient who invokes the right to have their data deleted
+cannot have that data removed from an immutable ledger. One
+architectural approach stores only cryptographic commitments on-chain
+while keeping personal data off-chain. Erasure is implemented by
+deleting the off-chain data and rendering the commitment unresolvable,
+preserving both the audit record's integrity and the practical effect of
+erasure. Bai et al.~demonstrate this hybrid model in practice for smart
+healthcare systems, using IPFS for off-chain storage of personally
+identifiable and protected health information while maintaining only
+encrypted references on the blockchain ledger, implementing GDPR Article
+17 compliance by enabling deletion from IPFS storage without
+compromising the integrity of the on-chain audit record~{[}19{]}. The
+broader legal adequacy of these hybrid approaches across different
+regulatory jurisdictions remains an open question.
+
+\subsection{Institutional Adoption and
+Governance}\label{institutional-adoption-and-governance}
+
+Distributed ledger governance requires consortium formation among
+participating institutions: agreement on ledger architecture, consensus
+mechanisms, access control, and governance of the governance layer
+itself. Healthcare institutions accustomed to managing their own data
+infrastructure often resist participation in a shared ledger they do not
+unilaterally control. Building the institutional trust and regulatory
+legitimacy for cross-institutional blockchain-based AI governance is a
+sociotechnical challenge that technical architecture alone cannot solve.
+
+\subsection{Clinician Trust
+Calibration}\label{clinician-trust-calibration}
+
+The governance framework described here is designed primarily around
+system-level accountability. Agentic AI governance also has a human
+dimension: clinicians must be neither over-reliant on AI agent
+recommendations nor systematically distrustful of them. Calibration, in
+this context, refers not only to probability reliability but to the
+alignment between a clinician's confidence in an AI recommendation and
+the AI's actual reliability. Governance frameworks that improve system
+trustworthiness must also invest in clinician education about when and
+how to appropriately weight AI recommendations.
+
+
+\section{Research Agenda}\label{research-agenda}
+
+The framework proposed here is a conceptual contribution that requires
+empirical validation. Five research priorities follow from it.
+
+\textbf{Priority 1: Empirical calibration evaluation of deployed
+clinical AI.} The framework's reliability layer requires that
+calibration be measured and documented for each agent decision node.
+Large-scale empirical studies measuring ECE, Brier scores, and conformal
+coverage rates across deployed clinical AI systems, including agentic
+pipelines, would establish the current state of the field and identify
+where governance intervention is most urgently needed. The finding that
+calibration reporting was insufficient for meta-analysis even in a 2024
+systematic review of CKD prediction models~{[}11{]} illustrates how far
+current practice falls from the governance standard the framework
+requires.
+
+\textbf{Priority 2: Smart contract frameworks for clinical AI ethical
+constraints.} The formal specification of governance rules in smart
+contract code, particularly escalation triggers, consent enforcement,
+and calibration drift alerts, requires the development of
+healthcare-specific smart contract templates validated against clinical
+governance requirements. Piloting these frameworks in simulated clinical
+environments would provide evidence of operational feasibility.
+
+\textbf{Priority 3: Cross-institutional federated governance pilots.}
+The federated learning and distributed governance architecture described
+in Section~5.5 requires multi-institutional pilots to evaluate
+feasibility, latency, interoperability, and governance dynamics. Such
+pilots would also generate the diverse external validation datasets
+needed to properly evaluate calibration stability and subgroup fairness
+across institutional settings.
+
+\textbf{Priority 4: Patient-facing uncertainty communication standards.}
+If conformal prediction is to be used to communicate uncertainty to
+patients and clinicians in a way that supports informed consent and
+meaningful oversight, standards are needed for how uncertainty should be
+displayed, interpreted, and acted upon in clinical interfaces. Human
+factors research on uncertainty communication in clinical decision
+support would bridge the technical and human dimensions of the
+governance framework.
+
+\textbf{Priority 5: Prospective evaluation of DLT audit trails in
+adverse event investigation.} The value of blockchain-based audit trails
+ultimately depends on evidence from actual adverse event investigations.
+Prospective studies comparing the completeness, accuracy, and usefulness
+of on-chain versus conventional audit records in clinical AI incident
+reviews would provide the evidence base needed to justify the
+significant investment required for DLT adoption in healthcare AI
+governance.
+
+
+\section{Conclusion}\label{conclusion}
+
+Agentic AI in healthcare is not a future prospect. It is a present
+reality. Systems that autonomously monitor, reason, and act on behalf of
+patients are already in clinical use, and their capabilities are
+expanding rapidly. The governance frameworks currently available to
+healthcare institutions, regulators, and patients were designed for a
+simpler world: a model produces a prediction, a clinician evaluates it,
+a patient receives care. AI agents now make sequential decisions at
+machine speed. Those frameworks leave critical accountability gaps
+unfilled.
+
+The five-layer trustworthiness governance framework proposed here
+addresses those gaps with measurable, operationalizable criteria. It
+integrates reliability evaluation, fairness auditing, provenance
+verification, consent management, and deployment readiness scoring.
+Distributed ledger technologies provide the accountability
+infrastructure that makes this framework verifiable: immutable audit
+trails, smart contract-enforced constraints, decentralized consent
+registries, and on-chain model provenance records transform governance
+from aspirational policy into operational architecture.
+
+Trustworthiness in agentic healthcare AI cannot be certified once at
+deployment and assumed thereafter. It must be earned continuously,
+measured rigorously, and verified independently. The framework presented
+here offers one path toward that goal, alongside a research agenda for
+the work required to validate it.
+
+
+\section*{Acknowledgments}\label{acknowledgments}
+
+The author acknowledges the growing body of clinical AI governance
+scholarship that informed this perspective, particularly the TRIPOD+AI,
+DECIDE-AI, and emerging conformal prediction frameworks for clinical
+uncertainty quantification. Portions of this manuscript were drafted
+with the assistance of Claude (Anthropic), an AI language model, used
+for structural drafting, editorial refinement, and reference formatting.
+The author takes full responsibility for all content, interpretations,
+and conclusions.
+
+
+\section*{Financial Disclosures}\label{financial-disclosures}
+
+\textbf{Funding:} None.
+
+\textbf{Conflicts of interest:} The author declares no financial or
+non-financial conflicts of interest relevant to the content of this
+manuscript.
+
+
+\section*{Contributors}\label{contributors}
+
+Michael O. Eniolade contributed to conceptualization, framework
+development, formal analysis, writing -- original draft, and writing --
+review and editing.
+
+
+\section*{Data Availability Statement}\label{data-availability-statement}
+
+No new data were generated or analyzed in this study. This is a
+conceptual perspective paper. All supporting evidence is drawn from
+published literature cited in the references.
+
+
+
+\section*{References}\label{references}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Rajpurkar P, Chen E, Banerjee O, Topol EJ. AI in health and medicine.
+  Nat Med. 2022;28(1):31--38.
+  \url{https://doi.org/10.1038/s41591-021-01614-0}
+\item
+  Gorenshtein A, Omar M, Glicksberg BS, Nadkarni GN, Klang E. AI Agents
+  in Clinical Medicine: A Systematic Review. medRxiv.
+  2025;2025.08.22.25334232.
+  \url{https://doi.org/10.1101/2025.08.22.25334232}
+\item
+  Collins GS, Moons KGM, Dhiman P, et al. TRIPOD+AI statement: updated
+  guidance for reporting clinical prediction models that use regression
+  or machine learning methods. BMJ. 2024;385:e078378.
+  \url{https://doi.org/10.1136/bmj-2023-078378}
+\item
+  Vasey B, Nagendran M, Campbell B, et al. Reporting guideline for the
+  early stage clinical evaluation of decision support systems driven by
+  artificial intelligence: DECIDE-AI. BMJ. 2022;377:e070904.
+  \url{https://doi.org/10.1136/bmj-2022-070904}
+\item
+  U.S.\ Food and Drug Administration. Artificial Intelligence/Machine
+  Learning (AI/ML)-Based Software as a Medical Device (SaMD) Action
+  Plan. Silver Spring, MD: FDA; 2021.
+\item
+  European Parliament and Council. Regulation (EU) 2024/1689 of the
+  European Parliament and of the Council --- Artificial Intelligence
+  Act. Official Journal of the European Union. 2024.
+\item
+  Guo C, Pleiss G, Sun Y, Weinberger KQ. On calibration of modern neural
+  networks. Proc 34th Int Conf Mach Learn. 2017;70:1321--1330.
+\item
+  Angelopoulos AN, Bates S. A gentle introduction to conformal
+  prediction and distribution-free uncertainty quantification. Found
+  Trends Mach Learn. 2023;16(4):494--591.
+  \url{https://doi.org/10.1561/2200000101}
+\item
+  Choudhury A, Asan O. Role of artificial intelligence in patient safety
+  outcomes: systematic literature review. JMIR Med Inform.
+  2020;8(7):e18599. \url{https://doi.org/10.2196/18599}
+\item
+  Morley J, Cowls J, Taddeo M, Floridi L. Ethical guidelines for AI in
+  public service. Gov Inf Q. 2021;38(3):101577.
+  \url{https://doi.org/10.1016/j.giq.2021.101577}
+\item
+  Haris M, Raveendra K, Travlos CK, Lewington A, Wu J, Shuweidhi F,
+  Nadarajah R, Gale CP. Prediction of incident chronic kidney disease in
+  community-based electronic health records: a systematic review and
+  meta-analysis. Clin Kidney J. 2024;17(5):sfae098.
+  \url{https://doi.org/10.1093/ckj/sfae098}
+\item
+  Campagner A, Ciucci D, Cabitza F. Modeling the unknown: on the role of
+  uncertainty in machine learning for healthcare. Comput Methods
+  Programs Biomed. 2025.
+  \url{https://doi.org/10.1016/j.cmpb.2024.108576}
+\item
+  Mittelstadt B, Allo P, Taddeo M, Wachter S, Floridi L. The ethics of
+  algorithms: mapping the debate. Big Data Soc.
+  2016;3(2):2053951716679679.
+  \url{https://doi.org/10.1177/2053951716679679}
+\item
+  Collins GS, Dhiman P, Ma J, et al. Evaluation of clinical prediction
+  models (part 1): from development to external validation. BMJ.
+  2024;384:e074819. \url{https://doi.org/10.1136/bmj-2023-074819}
+\item
+  Dershem M, Riley~III J, Venkataraman M, Nasr J, Hussain AS. 2026
+  Healthcare Predictions: AI, Blockchain, and the Rise of Decentralized
+  Innovation. BHTY. 2025;8(3).
+  \url{https://doi.org/10.30953/bhty.v8.475}
+\item
+  Ullah F, He J, Zhu N, Wajahat A, Nazir A, Qureshi S, Pathan MS,
+  Dev~S. Blockchain-enabled EHR access auditing: Enhancing healthcare
+  data security. Heliyon. 2024;10(16):e34407.
+  \url{https://doi.org/10.1016/j.heliyon.2024.e34407}
+\item
+  Liu J, Hu X. Blockchain meets AI in healthcare: a review of convergent
+  technologies for digital health transformation. Front Blockchain.
+  2026;9:1766092. \url{https://doi.org/10.3389/fbloc.2026.1766092}
+\item
+  Rieke N, Hancox J, Li W, et al. The future of digital health with
+  federated learning. npj Digit Med. 2020;3(1):119.
+  \url{https://doi.org/10.1038/s41746-020-00323-1}
+\item
+  Bai P, Kumar S, Kumar K, Kaiwartya O, Mahmud M, Lloret J. GDPR
+  Compliant Data Storage and Sharing in Smart Healthcare System: A
+  Blockchain-Based Solution. Electronics. 2022;11(20):3311.
+  \url{https://doi.org/10.3390/electronics11203311}
+\end{enumerate}

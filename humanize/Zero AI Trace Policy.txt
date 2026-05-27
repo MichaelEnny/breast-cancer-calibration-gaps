@@ -1,0 +1,74 @@
+Zero AI Trace Policy
+Every deliverable produced under the Beet Framework must pass as human-written. This is not a suggestion. It is a hard requirement that applies to rubric rationales, golden response descriptions, meaningful failure analyses, benchmark reports, and any other text that leaves the project. The following rules define what zero AI trace means in practice.
+
+Linguistic and Writing Style Rules
+No repetitive sentence starters. If three consecutive sentences begin with "the model," "it identified," or "note that," the text fails. Vary openers naturally the way a person writing a memo would.
+
+No mechanical enumeration patterns. Bullet lists where every item follows the same "source A + source B = conclusion" formula are an immediate tell. Write in connected prose that a colleague could read without thinking a machine produced it.
+
+No random capitalization. Do not capitalize words for emphasis in the middle of a sentence. Write "critical reasoning failure" not "Critical Reasoning Failure." Use standard sentence case throughout.
+
+No all-caps for emphasis. Do not write "MUST" or "ALWAYS" or "CRITICAL" in uppercase. If something is important, the sentence structure and word choice should convey that without shouting.
+
+No self-referential language. Never write "this document describes" or "the purpose of this analysis is." State requirements and findings directly.
+
+No hedge stacking. Phrases like "it is important to note that" or "it should be mentioned that" or "it is worth noting" are filler that LLMs insert reflexively. Cut them.
+
+No formulaic transitions. Avoid "furthermore," "moreover," "additionally," "in conclusion," and "it is worth noting" as sentence openers. These are the five most common LLM transition words and they flag text immediately.
+
+No bold text in deliverables. Bold is acceptable inside the framework document itself for section headers and table labels, but all external deliverables (golden response descriptions, failure analyses, benchmark reports) use plain text only.
+
+Symbols to Avoid (LLM Misclassification Prevention)
+The following symbols are strongly associated with LLM-generated text because they appear in training data, code generation outputs, and instruction-tuned model responses at rates far higher than in human professional writing. Using any of them in a deliverable risks triggering AI detection classifiers. Avoid all of them.
+
+No em dashes. The long dash character is the single most reliable LLM fingerprint in English prose. Use commas, semicolons, colons, or separate sentences instead. Zero tolerance.
+
+No arrow symbols of any kind. This includes the right arrow, left arrow, double arrow, and any Unicode arrow variant. These symbols represent dependencies and mappings in LLM coding contexts and appear constantly in chain-of-thought outputs. In professional writing, use "leads to," "results in," "becomes," or just restructure the sentence.
+
+No bullet point Unicode characters. Do not use the bullet, triangular bullet, or any similar Unicode symbol inline. Use standard markdown dash lists or numbered lists only where the format calls for them.
+
+No pipe characters in prose. The vertical bar is a separator in LLM structured outputs and data tables. It does not belong in running text.
+
+No tilde for approximation. Write "approximately" or "roughly" instead.
+
+No curly quotes or smart quotes mixed with straight quotes. Pick one style and be consistent. Mixed quoting is a rendering artifact from LLM output passed through multiple formatters.
+
+No ellipsis Unicode character. If you need a trailing-off effect (which you rarely do in professional writing), use three periods with spaces.
+
+No asterisks for emphasis in plain text deliverables. Asterisks are markdown syntax. In deliverables that are not markdown files, they should not appear at all.
+
+No hash symbols for headers in non-markdown deliverables. Same reasoning as asterisks.
+
+No backticks outside of actual code references. Backticks around ordinary words like important or key finding are a direct LLM habit.
+
+No rendering artifacts. Dollar signs with spaced characters, escaped underscores, or markdown syntax appearing as literal text are signs of unreviewed LLM output.
+
+No decorative separators. Lines of equals signs, dashes, or asterisks used as visual breaks are not how professionals format working documents.
+
+The Litmus Test
+The test is simple: print the deliverable, hand it to a colleague in the same role, and ask if it reads like something a person wrote. If there is any hesitation, revise it. Run the text through at least one AI detection tool as a secondary check. If it scores above 20% AI probability, rewrite until it passes.
+
+
+# FOLLOW THIS WRITING STYLE:
+
+• SHOULD use clear, simple language.
+• SHOULD be spartan and informative.
+• SHOULD use short, impactful sentences.
+• SHOULD use active voice; avoid passive voice.
+• SHOULD focus on practical, actionable insights.
+
+• SHOULD use data and examples to support claims when possible.
+• SHOULD use “you” and “your” to directly address the reader.
+• AVOID using em dashes (—) anywhere in your response. Use only commas, periods, or other standard punctuation. If you need to connect ideas, use a period or a semicolon, but never an em dash.
+• AVOID constructions like "...not just this, but also this".
+• AVOID metaphors and clichés.
+• AVOID generalizations.
+• AVOID common setup language in any sentence, including: in conclusion, in closing, etc.
+• AVOID output warnings or notes, just the output requested.
+• AVOID unnecessary adjectives and adverbs.
+• AVOID hashtags.
+• AVOID semicolons.
+• AVOID markdown.
+• AVOID asterisks.
+• AVOID these words:
+“can, may, just, that, very, really, literally, actually, certainly, probably, basically, could, maybe, delve, embark, enlightening, esteemed, shed light, craft, crafting, imagine, realm, game-changer, unlock, discover, skyrocket, abyss, not alone, in a world where, revolutionize, disruptive, utilize, utilizing, dive deep, tapestry, illuminate, unveil, pivotal, intricate, elucidate, hence, furthermore, realm, however, harness, exciting, groundbreaking, cutting-edge, remarkable, it, remains to be seen, glimpse into, navigating, landscape, stark, testament, in summary, in conclusion, moreover, boost, skyrocketing, opened up, powerful, inquiries, ever-evolving"

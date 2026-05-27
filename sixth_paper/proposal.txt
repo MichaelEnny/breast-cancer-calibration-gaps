@@ -1,0 +1,24 @@
+Full chapter title:
+Teaching Trustworthy Healthcare AI: Preparing Learners to Evaluate Reliability, Fairness, Security, and Deployment Readiness
+
+Recommended foundation from the dissertation roadmap:
+Paper 6, Beyond Accuracy in Healthcare AI: A Reliability Evaluation Framework for Clinical Prediction Models.
+
+Supporting papers:
+Paper 1 on CKD calibration and uncertainty, Paper 3 on secure AI architecture, Paper 8 on fairness and calibration, Paper 9 on trustworthy clinical decision support, and Paper 10 on deployment readiness.
+
+Chapter proposal:
+Healthcare AI education often starts with a familiar lesson: collect data, train a model, report accuracy, and compare results. That approach is useful, but it leaves out a question students and professionals need to ask before any clinical AI system reaches practice. Is the system trustworthy enough for real healthcare settings?
+
+This chapter focuses on how educators, healthcare professionals, and graduate students should learn to evaluate clinical AI systems beyond accuracy. A model might predict kidney disease, triage risk, or ICU deterioration with a strong test score, yet still give poorly calibrated probabilities, miss performance gaps across patient groups, fail under missing data, or lack basic security and governance controls. Those weaknesses matter because healthcare AI does not sit in a lab. It influences patient risk communication, clinician judgment, workflow decisions, and institutional accountability.
+
+The chapter proposes a practical teaching framework for trustworthy healthcare AI. The framework covers five areas: reliability, fairness, security, explainability, and deployment readiness. Reliability includes calibration, Brier score, uncertainty estimation, and model drift. Fairness includes subgroup performance and subgroup calibration. Security includes data protection, access control, audit trails, and adversarial risk. Explainability focuses on whether model outputs make sense to the people expected to use them. Deployment readiness brings these pieces together through a structured review before clinical use.
+
+The chapter will use realistic healthcare examples to make these ideas easier to teach. For example, a classroom case might ask students to compare two chronic kidney disease models. One model has higher accuracy, while the other gives better calibrated probabilities and clearer uncertainty estimates. Students would then discuss which model is more appropriate for clinical decision support and why. Another case might examine an emergency department triage model whose overall performance looks acceptable, while older patients or patients with missing lab values receive less reliable predictions.
+
+The chapter will also include sample learning objectives, classroom activities, discussion prompts, and assessment ideas for health informatics, data science, nursing informatics, public health, and AI courses. These materials will help instructors teach students how to question model outputs, inspect failure patterns, and connect technical evaluation to patient safety and professional responsibility.
+
+The main contribution is an education-focused framework for developing AI-literate healthcare professionals. Learners should leave with a practical way to judge whether a clinical AI system is accurate, fair, secure, explainable, and ready for use in real care settings.
+
+Additional information:
+This chapter fits the Encyclopedia of Education and Human Development because it connects AI literacy, professional preparation, healthcare education, and responsible technology use. It reframes trustworthy healthcare AI as a human development issue, not only a technical issue. Students, clinicians, researchers, and administrators need shared language for evaluating AI systems before those systems affect patient care.

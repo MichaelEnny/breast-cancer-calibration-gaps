@@ -1,0 +1,17 @@
+﻿ARXIV SUBMISSION NOTES
+======================
+Enter the following on the arXiv submission form -- do NOT include in the PDF.
+
+PRIMARY CATEGORY
+  cs.CY  (Computers and Society)
+
+SECONDARY / CROSS-LIST CATEGORIES
+  cs.AI  (Artificial Intelligence)
+  cs.HC  (Human-Computer Interaction)
+
+DATE
+  May 2026
+
+KEYWORDS (for the submission form)
+  agentic AI; healthcare governance; probability calibration;
+  distributed ledger technology; clinical decision support; trustworthy AI
